@@ -181,5 +181,5 @@ for e in data:
 h = draw_slurm_chart(filtered_data, canvas, width=term_width - 2, xoffset=1, yoffset=1)
 draw_rectangle(canvas, height = h + 2)
 print_canvas(canvas)
-#print("{} jobs drawn".format(y-1))
+print("{}/{} jobs currently running".format(len(filtered_data), len(data)))
 
