@@ -36,7 +36,7 @@ def div_round_up(v, x):
         ir += 1
     return ir
 
-def render_mono_braille(pic, out_pic):
+def render_mono_braille(pic, out_pic, x=0, y=0):
     (width, height) = get_size(pic)
 
     s_width = div_round_up(width, 2)
@@ -52,9 +52,9 @@ def render_mono_braille(pic, out_pic):
             else:
                 pic_s[int(y / 4)][int(x / 2)] &= ~pix
 
-    for y in range(0, s_height):
-        for x in range(0, s_width):
-            out_pic[y][x] = chr(pic_s[y][x])
+    for y_ in range(0, s_height):
+        for x_ in range(0, s_width):
+            out_pic[y_ + y][x_ + x] = chr(pic_s[y_][x_])
 
 def set_pixel(pic, x, y, value=True):
     (width, height) = get_size(pic)
@@ -149,7 +149,7 @@ def draw_slurm_chart(data, canvas, x=0, y=0, width=None, height=None):
             set_pixel(dpic, i, y)
         y += 1
         #print(r)
-    render_mono_braille(dpic, canvas)
+    render_mono_braille(dpic, canvas, x=x, y=y)
 
 draw_slurm_chart(filtered_data, canvas, width=term_width - 2)
 print_canvas(canvas)
