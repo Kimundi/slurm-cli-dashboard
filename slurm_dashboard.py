@@ -116,7 +116,7 @@ dim = shutil.get_terminal_size((80, 20))
 term_width  = dim.columns
 term_height = dim.lines
 
-background = make_2d(" ", term_width, term_height)
+background = make_2d(term_width, term_height, " ")
 
 print("Terminal dimensions: {} x {}".format(term_width, term_height))
 
