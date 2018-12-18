@@ -102,6 +102,9 @@ def draw_rectangle(canvas, xoffset=0, yoffset=0, width=None, height=None):
     for x in range(xoffset, xoffset + width):
         set_pixel(canvas, x, yoffset, '#')
         set_pixel(canvas, x, yoffset + height - 1, '#')
+    for y in range(yoffset, yoffset + height):
+        set_pixel(canvas, xoffset, y, '#')
+        set_pixel(canvas, xoffset + width - 1, y, '#')
 
 ################################################################################
 # squeue parsing
