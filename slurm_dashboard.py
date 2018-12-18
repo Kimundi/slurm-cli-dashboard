@@ -155,7 +155,7 @@ def draw_slurm_chart(data, canvas, xoffset=0, yoffset=0, width=None, height=None
         #print(r)
     render_mono_braille(dpic, canvas, xoffset=xoffset, yoffset=yoffset)
 
-draw_slurm_chart(filtered_data, canvas, width=term_width - 2)
+draw_slurm_chart(filtered_data, canvas, width=term_width - 2, xoffset=1, yoffset=1)
 print_canvas(canvas)
 #print("{} jobs drawn".format(y-1))
 
