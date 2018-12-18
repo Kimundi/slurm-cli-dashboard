@@ -100,7 +100,8 @@ def draw_rectangle(canvas, xoffset=0, yoffset=0, width=None, height=None):
     height = height or cheight
 
     for x in range(xoffset, xoffset + width):
-        set_pixel(canvas, x, 0, '#')
+        set_pixel(canvas, x, yoffset, '#')
+        set_pixel(canvas, x, yoffset + height - 1, '#')
 
 ################################################################################
 # squeue parsing
