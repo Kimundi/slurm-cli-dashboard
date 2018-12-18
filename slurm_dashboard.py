@@ -36,38 +36,40 @@ def div_round_up(v, x):
         ir += 1
     return ir
 
-def draw(pic, x=0, y=0, crop_width = None, crop_height = None):
+def render_mono_braille(pic):
     (width, height) = get_size(pic)
-    if crop_height:
-        height = crop_height
-    if crop_width:
-        width = crop_width
 
-    pic_s = make_2d(div_round_up(width, 2), div_round_up(height, 4), braille_char_offset)
+    s_width = div_round_up(width, 2)
+    s_height = div_round_up(height, 4)
+    pic_s = make_2d(s_width, s_height, braille_char_offset)
 
     for y in range(0, height):
-        line = pic[y]
         for x in range(0, width):
-            pixel = line[x]
+            pixel = pic[y][x]
             pix = pixel_map[y % 4][x % 2]
             if pixel:
                 pic_s[int(y / 4)][int(x / 2)] |= pix
             else:
                 pic_s[int(y / 4)][int(x / 2)] &= ~pix
 
-    cout = ""
-    for line in pic_s:
-        out = ""
-        for pixel in line:
-            out += "{}".format(chr(pixel))
-        cout += out + "\n"
-    return cout
+    for y in range(0, s_height):
+        for x in range(0, s_width):
+            pic_s[y][x] = chr(pic_s[y][x])
+
+    return pic_s
 
 def set_pixel(pic, x, y, value=True):
     (width, height) = get_size(pic)
 
     if x >= 0 and y >= 0 and x < width and y < height:
         pic[y][x] = value
+
+def print_canvas(canvas):
+    for line in canvas:
+        out = ""
+        for pixel in line:
+            out += pixel
+        print(out)
 
 ################################################################################
 # squeue parsing
@@ -116,7 +118,7 @@ dim = shutil.get_terminal_size((80, 20))
 term_width  = dim.columns
 term_height = dim.lines
 
-background = make_2d(term_width, term_height, " ")
+canvas = make_2d(term_width, term_height, " ")
 
 print("Terminal dimensions: {} x {}".format(term_width, term_height))
 
@@ -126,6 +128,12 @@ data = parse(stdout)
 min_time = parse_time_to_seconds("00:00")
 max_time = parse_time_to_seconds(args.time_cutoff)
 
+filtered_data = []
+for e in data:
+    if e["STATE"] != "RUNNING":
+        continue
+    filtered_data.append(e)
+
 def draw_slurm_chart(data, x=0, y=0, width=None, height=None):
     d_width = (width or 80)*2
     time_scale = (1 / max_time) * d_width
@@ -133,8 +141,6 @@ def draw_slurm_chart(data, x=0, y=0, width=None, height=None):
     dpic = make_pic(d_width, len(data))
     y = 0
     for e in data:
-        if e["STATE"] != "RUNNING":
-            continue
         t = e["TIME"]
         r = parse_time_to_seconds(t)
 
@@ -145,8 +151,8 @@ def draw_slurm_chart(data, x=0, y=0, width=None, height=None):
             set_pixel(dpic, i, y)
         y += 1
         #print(r)
-    print(draw(dpic, crop_height=y))
+    print_canvas(render_mono_braille(dpic))
 
-draw_slurm_chart(data, width=term_width - 2)
+draw_slurm_chart(filtered_data, width=term_width - 2)
 #print("{} jobs drawn".format(y-1))
 
