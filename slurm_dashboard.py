@@ -60,7 +60,7 @@ def draw_mono_braille(pic, out_pic, xoffset=0, yoffset=0):
             if target_x < out_width and target_y < out_height:
                 out_pic[target_y][target_x] = chr(pic_s[y][x])
 
-def set_pixel(pic, x, y, value=True):
+def set_pixel(pic, x, y, value):
     (width, height) = get_size(pic)
 
     if x >= 0 and y >= 0 and x < width and y < height:
@@ -99,6 +99,8 @@ def draw_rectangle(canvas, xoffset=0, yoffset=0, width=None, height=None):
     width = width or cwidth
     height = height or cheight
 
+    for x in range(xoffset, xoffset + width):
+        set_pixel(canvas, x, 0, '#')
 
 ################################################################################
 # squeue parsing
