@@ -146,5 +146,5 @@ def draw_slurm_chart(data, x=0, y=0, width=None, height=None):
     print(draw(dpic, crop_height=y))
 
 draw_slurm_chart(data, width=term_width)
-print("{} jobs drawn".format(y-1))
+#print("{} jobs drawn".format(y-1))
 
