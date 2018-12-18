@@ -89,7 +89,7 @@ def draw_slurm_chart(data, canvas, xoffset=0, yoffset=0, width=None, height=None
         r = min(max_time, r)
 
         for i in range(0, int(r * time_scale)):
-            set_pixel(dpic, i, y)
+            set_pixel(dpic, i, y, True)
         y += 1
         #print(r)
     draw_mono_braille(dpic, canvas, xoffset=xoffset, yoffset=yoffset)
