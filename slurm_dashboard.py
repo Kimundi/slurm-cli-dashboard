@@ -100,17 +100,20 @@ def draw_rectangle(canvas, xoffset=0, yoffset=0, width=None, height=None):
     width = width or cwidth
     height = height or cheight
 
-    for x in range(xoffset + 1, xoffset + width - 1):
-        set_pixel(canvas, x,                   yoffset,              '─')
-        set_pixel(canvas, x,                   yoffset + height - 1, '─')
-    for y in range(yoffset + 1, yoffset + height - 1):
-        set_pixel(canvas, xoffset,             y,                    '│')
-        set_pixel(canvas, xoffset + width - 1, y,                    '│')
+    def combine(canvas, x, y, sym)
+        set_pixel(canvas, x, y, sym)
 
-    set_pixel(canvas,     xoffset,             yoffset,              '┌')
-    set_pixel(canvas,     xoffset + width - 1, yoffset,              '┐')
-    set_pixel(canvas,     xoffset,             yoffset + height - 1, '└')
-    set_pixel(canvas,     xoffset + width - 1, yoffset + height - 1, '┘')
+    for x in range(xoffset + 1, xoffset + width - 1):
+        combine(canvas, x,                   yoffset,              '─')
+        combine(canvas, x,                   yoffset + height - 1, '─')
+    for y in range(yoffset + 1, yoffset + height - 1):
+        combine(canvas, xoffset,             y,                    '│')
+        combine(canvas, xoffset + width - 1, y,                    '│')
+
+    combine(canvas,     xoffset,             yoffset,              '┌')
+    combine(canvas,     xoffset + width - 1, yoffset,              '┐')
+    combine(canvas,     xoffset,             yoffset + height - 1, '└')
+    combine(canvas,     xoffset + width - 1, yoffset + height - 1, '┘')
 
 ################################################################################
 # squeue parsing
