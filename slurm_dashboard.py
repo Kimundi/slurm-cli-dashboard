@@ -116,6 +116,8 @@ dim = shutil.get_terminal_size((80, 20))
 term_width  = dim.columns
 term_height = dim.lines
 
+background = make_2d(" ", term_width, term_height)
+
 print("Terminal dimensions: {} x {}".format(term_width, term_height))
 
 stdout = subprocess.run(["squeue", "--format", "%i;%u;%T;%M;%R"] + extra_args, stdout=subprocess.PIPE, encoding="utf-8").stdout
