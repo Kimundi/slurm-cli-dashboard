@@ -102,12 +102,17 @@ usage.add_argument("--time-cutoff", default="2:00:00", help="time at which to cu
 
 #print(extra_args)
 
+import shutil
+dim = shutil.get_terminal_size((80, 20))
+term_width  = dim.columns
+term_height = dim.lines
+
 stdout = subprocess.run(["squeue", "--format", "%i;%u;%T;%M;%R"] + extra_args, stdout=subprocess.PIPE, encoding="utf-8").stdout
 data = parse(stdout)
 
 min_time = parse_time_to_seconds("00:00")
 max_time = parse_time_to_seconds(args.time_cutoff)
-d_width = 80*2
+d_width = term_width*2
 time_scale = (1 / max_time) * d_width
 
 dpic = make_pic(d_width, len(data))
