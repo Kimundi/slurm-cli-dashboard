@@ -100,7 +100,7 @@ def draw_rectangle(canvas, xoffset=0, yoffset=0, width=None, height=None):
     width = width or cwidth
     height = height or cheight
 
-    def combine(canvas, x, y, sym)
+    def combine(canvas, x, y, sym):
         set_pixel(canvas, x, y, sym)
 
     for x in range(xoffset + 1, xoffset + width - 1):
