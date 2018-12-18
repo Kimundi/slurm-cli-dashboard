@@ -107,10 +107,10 @@ def draw_rectangle(canvas, xoffset=0, yoffset=0, width=None, height=None):
         set_pixel(canvas, xoffset,             y,                    '|')
         set_pixel(canvas, xoffset + width - 1, y,                    '|')
 
-    set_pixel(canvas,     xoffset + width - 1, yoffset + height - 1, 'a')
-    set_pixel(canvas,     xoffset,             yoffset + height - 1, 'b')
-    set_pixel(canvas,     xoffset,             yoffset,              'c')
-    set_pixel(canvas,     xoffset + width - 1, yoffset,              'd')
+    set_pixel(canvas,     xoffset,             yoffset,              'a')
+    set_pixel(canvas,     xoffset + width - 1, yoffset,              'b')
+    set_pixel(canvas,     xoffset,             yoffset + height - 1, 'c')
+    set_pixel(canvas,     xoffset + width - 1, yoffset + height - 1, 'd')
 
 ################################################################################
 # squeue parsing
