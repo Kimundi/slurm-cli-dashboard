@@ -36,7 +36,7 @@ def div_round_up(v, x):
         ir += 1
     return ir
 
-def render_mono_braille(pic, out_pic, xoffset=0, yoffset=0):
+def draw_mono_braille(pic, out_pic, xoffset=0, yoffset=0):
     (width, height) = get_size(pic)
 
     s_width = div_round_up(width, 2)
@@ -72,6 +72,33 @@ def print_canvas(canvas):
         for pixel in line:
             out += pixel
         print(out)
+
+def draw_slurm_chart(data, canvas, xoffset=0, yoffset=0, width=None, height=None):
+    (cwidth, cheight) = get_size(canvas)
+
+    d_width = (width or cwidth)*2
+    time_scale = (1 / max_time) * d_width
+
+    dpic = make_pic(d_width, len(data))
+    y = 0
+    for e in data:
+        t = e["TIME"]
+        r = parse_time_to_seconds(t)
+
+        r = max(min_time, r)
+        r = min(max_time, r)
+
+        for i in range(0, int(r * time_scale)):
+            set_pixel(dpic, i, y)
+        y += 1
+        #print(r)
+    draw_mono_braille(dpic, canvas, xoffset=xoffset, yoffset=yoffset)
+
+def draw_rectangle(canvas, xoffset=0, yoffset=0, width=None, height=None):
+    (cwidth, cheight) = get_size(canvas)
+    width = width or cwidth
+    height = height or cheight
+
 
 ################################################################################
 # squeue parsing
@@ -135,25 +162,6 @@ for e in data:
     if e["STATE"] != "RUNNING":
         continue
     filtered_data.append(e)
-
-def draw_slurm_chart(data, canvas, xoffset=0, yoffset=0, width=None, height=None):
-    d_width = (width or 80)*2
-    time_scale = (1 / max_time) * d_width
-
-    dpic = make_pic(d_width, len(data))
-    y = 0
-    for e in data:
-        t = e["TIME"]
-        r = parse_time_to_seconds(t)
-
-        r = max(min_time, r)
-        r = min(max_time, r)
-
-        for i in range(0, int(r * time_scale)):
-            set_pixel(dpic, i, y)
-        y += 1
-        #print(r)
-    render_mono_braille(dpic, canvas, xoffset=xoffset, yoffset=yoffset)
 
 draw_slurm_chart(filtered_data, canvas, width=term_width - 2, xoffset=1, yoffset=1)
 print_canvas(canvas)
