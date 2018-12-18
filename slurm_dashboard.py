@@ -123,24 +123,28 @@ data = parse(stdout)
 
 min_time = parse_time_to_seconds("00:00")
 max_time = parse_time_to_seconds(args.time_cutoff)
-d_width = term_width*2
-time_scale = (1 / max_time) * d_width
 
-dpic = make_pic(d_width, len(data))
-y = 0
-for e in data:
-    if e["STATE"] != "RUNNING":
-        continue
-    t = e["TIME"]
-    r = parse_time_to_seconds(t)
+def draw_slurm_chart(data, x=0, y=0, width=None, height=None):
+    d_width = (width or 80)*2
+    time_scale = (1 / max_time) * d_width
 
-    r = max(min_time, r)
-    r = min(max_time, r)
+    dpic = make_pic(d_width, len(data))
+    y = 0
+    for e in data:
+        if e["STATE"] != "RUNNING":
+            continue
+        t = e["TIME"]
+        r = parse_time_to_seconds(t)
 
-    for i in range(0, int(r * time_scale)):
-        set_pixel(dpic, i, y)
-    y += 1
-    #print(r)
-print(draw(dpic, crop_height=y))
+        r = max(min_time, r)
+        r = min(max_time, r)
+
+        for i in range(0, int(r * time_scale)):
+            set_pixel(dpic, i, y)
+        y += 1
+        #print(r)
+    print(draw(dpic, crop_height=y))
+
+draw_slurm_chart(data, width=term_width)
 print("{} jobs drawn".format(y-1))
 
