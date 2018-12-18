@@ -155,7 +155,7 @@ term_height = dim.lines
 
 canvas = make_2d(term_width, term_height, " ")
 
-print("Terminal dimensions: {} x {}".format(term_width, term_height))
+print("Terminal dimensions: {} x {}".format(term_width, term_height - 2))
 
 stdout = subprocess.run(["squeue", "--format", "%i;%u;%T;%M;%R"] + extra_args, stdout=subprocess.PIPE, encoding="utf-8").stdout
 data = parse(stdout)
