@@ -58,7 +58,7 @@ def render_mono_braille(pic, out_pic, xoffset=0, yoffset=0):
             target_x = x + xoffset
             target_y = y + yoffset
             if target_x < out_width and target_y < out_height:
-                out_pic[target_y][target_x] = chr(pic_s[y_][x_])
+                out_pic[target_y][target_x] = chr(pic_s[y][x])
 
 def set_pixel(pic, x, y, value=True):
     (width, height) = get_size(pic)
