@@ -36,7 +36,7 @@ def div_round_up(v, x):
         ir += 1
     return ir
 
-def draw(pic, crop_width = None, crop_height = None):
+def draw(pic, x=0, y=0, crop_width = None, crop_height = None):
     (width, height) = get_size(pic)
     if crop_height:
         height = crop_height
