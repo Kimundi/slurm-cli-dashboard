@@ -101,16 +101,16 @@ def draw_rectangle(canvas, xoffset=0, yoffset=0, width=None, height=None):
     height = height or cheight
 
     for x in range(xoffset + 1, xoffset + width - 1):
-        set_pixel(canvas, x, yoffset, '#')
-        set_pixel(canvas, x, yoffset + height - 1, '#')
+        set_pixel(canvas, x,                   yoffset,              '-')
+        set_pixel(canvas, x,                   yoffset + height - 1, '-')
     for y in range(yoffset + 1, yoffset + height - 1):
-        set_pixel(canvas, xoffset, y, '#')
-        set_pixel(canvas, xoffset + width - 1, y, '#')
+        set_pixel(canvas, xoffset,             y,                    '|')
+        set_pixel(canvas, xoffset + width - 1, y,                    '|')
 
-    set_pixel(canvas, xoffset, yoffset, 'a')
-    set_pixel(canvas, xoffset, yoffset + height - 1, 'b')
-    set_pixel(canvas, xoffset, yoffset, 'c')
-    set_pixel(canvas, xoffset + width - 1, yoffset, 'd')
+    set_pixel(canvas,     xoffset + width - 1, yoffset + height - 1, 'a')
+    set_pixel(canvas,     xoffset,             yoffset + height - 1, 'b')
+    set_pixel(canvas,     xoffset,             yoffset,              'c')
+    set_pixel(canvas,     xoffset + width - 1, yoffset,              'd')
 
 ################################################################################
 # squeue parsing
