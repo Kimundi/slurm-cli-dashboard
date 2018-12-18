@@ -96,10 +96,11 @@ def parse_time_to_seconds(s):
 ################################################################################
 
 usage = argparse.ArgumentParser()
-usage.add_argument("--time-cutoff", default="2:00:00")
-args = usage.parse_args()
+usage.add_argument("--time-cutoff", default="2:00:00", help="time at which to cut off the graph")
+#usage.add_argument('squeueargs', nargs=argparse.REMAINDER, help="arguments to be passed to squeue")
+(args, extra_args) = usage.parse_known_args()
 
-extra_args = sys.argv[1:]
+#print(extra_args)
 
 stdout = subprocess.run(["squeue", "--format", "%i;%u;%T;%M;%R"] + extra_args, stdout=subprocess.PIPE, encoding="utf-8").stdout
 data = parse(stdout)
