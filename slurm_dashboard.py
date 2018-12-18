@@ -151,11 +151,11 @@ usage.add_argument("--time-cutoff", default="2:00:00", help="time at which to cu
 import shutil
 dim = shutil.get_terminal_size((80, 20))
 term_width  = dim.columns
-term_height = dim.lines
+term_height = dim.lines - 2
 
 canvas = make_2d(term_width, term_height, " ")
 
-print("Terminal dimensions: {} x {}".format(term_width, term_height - 2))
+print("Terminal dimensions: {} x {}".format(term_width, term_height))
 
 stdout = subprocess.run(["squeue", "--format", "%i;%u;%T;%M;%R"] + extra_args, stdout=subprocess.PIPE, encoding="utf-8").stdout
 data = parse(stdout)
