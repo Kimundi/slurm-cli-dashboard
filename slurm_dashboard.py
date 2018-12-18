@@ -93,6 +93,7 @@ def draw_slurm_chart(data, canvas, xoffset=0, yoffset=0, width=None, height=None
         y += 1
         #print(r)
     draw_mono_braille(dpic, canvas, xoffset=xoffset, yoffset=yoffset)
+    return y
 
 def draw_rectangle(canvas, xoffset=0, yoffset=0, width=None, height=None):
     (cwidth, cheight) = get_size(canvas)
@@ -151,7 +152,7 @@ usage.add_argument("--time-cutoff", default="2:00:00", help="time at which to cu
 import shutil
 dim = shutil.get_terminal_size((80, 20))
 term_width  = dim.columns
-term_height = dim.lines - 3
+term_height = dim.lines
 
 canvas = make_2d(term_width, term_height, " ")
 
@@ -169,8 +170,8 @@ for e in data:
         continue
     filtered_data.append(e)
 
-draw_slurm_chart(filtered_data, canvas, width=term_width - 2, xoffset=1, yoffset=1)
-draw_rectangle(canvas)
+h = draw_slurm_chart(filtered_data, canvas, width=term_width - 2, xoffset=1, yoffset=1)
+draw_rectangle(canvas, height = h)
 print_canvas(canvas)
 #print("{} jobs drawn".format(y-1))
 
