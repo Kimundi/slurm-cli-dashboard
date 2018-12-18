@@ -115,6 +115,10 @@ def draw_rectangle(canvas, xoffset=0, yoffset=0, width=None, height=None):
     combine(canvas,     xoffset,             yoffset + height - 1, '└')
     combine(canvas,     xoffset + width - 1, yoffset + height - 1, '┘')
 
+draw_text(canvas, text, xoffset=0, yoffset=0):
+    for i in range(0, len(text)):
+        set_pixel(canvas, xoffset + i, yoffset, text[i])
+
 ################################################################################
 # squeue parsing
 ################################################################################
@@ -180,6 +184,5 @@ for e in data:
 
 h = draw_slurm_chart(filtered_data, canvas, width=term_width - 2, xoffset=1, yoffset=1)
 draw_rectangle(canvas, height = h + 2)
+draw_text(canvas, "{}/{} jobs currently running".format(len(filtered_data), len(data)), yoffset=h + 2)
 print_canvas(canvas)
-print("{}/{} jobs currently running".format(len(filtered_data), len(data)))
-
