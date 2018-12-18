@@ -151,7 +151,7 @@ usage.add_argument("--time-cutoff", default="2:00:00", help="time at which to cu
 import shutil
 dim = shutil.get_terminal_size((80, 20))
 term_width  = dim.columns
-term_height = dim.lines - 2
+term_height = dim.lines - 3
 
 canvas = make_2d(term_width, term_height, " ")
 
