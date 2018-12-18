@@ -55,11 +55,13 @@ def draw(pic, crop_width = None, crop_height = None):
             else:
                 pic_s[int(y / 4)][int(x / 2)] &= ~pix
 
+    cout = ""
     for line in pic_s:
         out = ""
         for pixel in line:
             out += "{}".format(chr(pixel))
-        print(out)
+        cout += out + "\n"
+    return cout
 
 def set_pixel(pic, x, y, value=True):
     (width, height) = get_size(pic)
@@ -139,6 +141,6 @@ for e in data:
         set_pixel(dpic, i, y)
     y += 1
     #print(r)
-draw(dpic, crop_height=y)
+print(draw(dpic, crop_height=y))
 print("{} jobs drawn".format(y-1))
 
