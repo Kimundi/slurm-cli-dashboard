@@ -29,6 +29,13 @@ def get_size(pic):
     width = len(pic[0])
     return (width, height)
 
+def div_round_up(v, x):
+    r = v / x
+    ir = int(r)
+    if r > ir:
+        ir += 1
+    return ir
+
 def draw(pic, crop_width = None, crop_height = None):
     (width, height) = get_size(pic)
     if crop_height:
@@ -36,7 +43,7 @@ def draw(pic, crop_width = None, crop_height = None):
     if crop_width:
         width = crop_width
 
-    pic_s = make_2d(int((width / 2) + 1), int((height / 4) + 1), braille_char_offset)
+    pic_s = make_2d(div_round_up(width, 2), div_round_up(height, 4), braille_char_offset)
 
     for y in range(0, height):
         line = pic[y]
