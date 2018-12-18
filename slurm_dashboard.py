@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
 
+import re
+import subprocess
+import sys
+import argparse
+
+################################################################################
+# braille drawing
+################################################################################
+
 pixel_map = ((0x01, 0x08),
              (0x02, 0x10),
              (0x04, 0x20),
@@ -51,15 +60,11 @@ def set_pixel(pic, x, y, value=True):
     if x >= 0 and y >= 0 and x < width and y < height:
         pic[y][x] = value
 
-s = 50
-pic = make_pic(100, 100)
-for x in range(0, 100):
-    for y in range(0, 100):
-        if (x*x + y*y) <= (s*s):
-            set_pixel(pic, x, y, True)
-        #else:
-            #set_pixel(pic, x, y, False)
-#draw(pic)
+################################################################################
+# squeue parsing
+################################################################################
+
+t_re = re.compile("(([0-9]+)-)?(([0-9]+):)?([0-9]+):([0-9]+)")
 
 def parse(sq_out):
     queue_jobs = []
@@ -74,26 +79,6 @@ def parse(sq_out):
     #print(queue_jobs)
     return queue_jobs
 
-#data = parse("""JOBID;USER;STATE;TIME;NODELIST(REASON)
-#1889315;smmaloeb;PENDING;0:00;(launch failed requeued held)
-#1934039;smmaloeb;PENDING;0:00;(launch failed requeued held)
-#1934042;smmaloeb;PENDING;0:00;(launch failed requeued held)
-#1934120;smmaloeb;PENDING;0:00;(launch failed requeued held)
-#1934123;smmaloeb;PENDING;0:00;(launch failed requeued held)
-#""")
-
-import re
-t_re = re.compile("(([0-9]+)-)?(([0-9]+):)?([0-9]+):([0-9]+)")
-
-import subprocess
-#import os
-#USER = os.path.expandvars("$USER")
-import sys
-extra_args = sys.argv[1:]
-
-stdout = subprocess.run(["squeue", "--format", "%i;%u;%T;%M;%R"] + extra_args, stdout=subprocess.PIPE, encoding="utf-8").stdout
-data = parse(stdout)
-
 def parse_time(s):
     r = t_re.match(s)
     days = r.group(2) or '0'
@@ -106,8 +91,21 @@ def parse_time_to_seconds(s):
     (days, hours, mins, secs) = parse_time(s)
     return days * 24 * 60 * 60 + hours * 60 * 60 + mins * 60 + secs
 
+################################################################################
+# main
+################################################################################
+
+usage = argparse.ArgumentParser()
+usage.add_argument("--time-cutoff", default="2:00:00")
+args = usage.parse_args()
+
+extra_args = sys.argv[1:]
+
+stdout = subprocess.run(["squeue", "--format", "%i;%u;%T;%M;%R"] + extra_args, stdout=subprocess.PIPE, encoding="utf-8").stdout
+data = parse(stdout)
+
 min_time = parse_time_to_seconds("00:00")
-max_time = parse_time_to_seconds("2:00:00")
+max_time = parse_time_to_seconds(args.time_cutoff)
 d_width = 80*2
 time_scale = (1 / max_time) * d_width
 
