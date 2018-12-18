@@ -93,7 +93,7 @@ def draw_slurm_chart(data, canvas, xoffset=0, yoffset=0, width=None, height=None
         y += 1
         #print(r)
     draw_mono_braille(dpic, canvas, xoffset=xoffset, yoffset=yoffset)
-    return y
+    return div_round_up(y, 4)
 
 def draw_rectangle(canvas, xoffset=0, yoffset=0, width=None, height=None):
     (cwidth, cheight) = get_size(canvas)
