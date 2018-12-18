@@ -65,6 +65,14 @@ def set_pixel(pic, x, y, value):
     if x >= 0 and y >= 0 and x < width and y < height:
         pic[y][x] = value
 
+def get_pixel(pic, x, y):
+    (width, height) = get_size(pic)
+
+    if x >= 0 and y >= 0 and x < width and y < height:
+        return pic[y][x]
+    else:
+        return None
+
 def print_canvas(canvas):
     for line in canvas:
         out = ""
