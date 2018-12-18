@@ -171,7 +171,7 @@ for e in data:
     filtered_data.append(e)
 
 h = draw_slurm_chart(filtered_data, canvas, width=term_width - 2, xoffset=1, yoffset=1)
-draw_rectangle(canvas, height = h)
+draw_rectangle(canvas, height = h + 2)
 print_canvas(canvas)
 #print("{} jobs drawn".format(y-1))
 
