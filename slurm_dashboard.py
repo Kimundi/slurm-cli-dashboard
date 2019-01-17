@@ -80,12 +80,11 @@ def print_canvas(canvas):
             out += pixel
         print(out)
 
-def draw_slurm_chart(data, canvas, xoffset=0, yoffset=0, width=None, height=None):
+def draw_slurm_chart(data, canvas, xoffset=0, yoffset=0, width=None, height=None, max_time=None):
     (cwidth, cheight) = get_size(canvas)
 
     d_width = (width or cwidth)*2
 
-    nonlocal max_time
     if max_time == None:
         max_time = 0
         for e in data:
@@ -109,7 +108,7 @@ def draw_slurm_chart(data, canvas, xoffset=0, yoffset=0, width=None, height=None
         y += 1
         #print(r)
     draw_mono_braille(dpic, canvas, xoffset=xoffset, yoffset=yoffset)
-    return div_round_up(y, 4)
+    return (div_round_up(y, 4), max_time)
 
 def draw_rectangle(canvas, xoffset=0, yoffset=0, width=None, height=None):
     (cwidth, cheight) = get_size(canvas)
@@ -201,10 +200,10 @@ for e in data:
         continue
     filtered_data.append(e)
 
-h = draw_slurm_chart(filtered_data, canvas, width=term_width - 2, xoffset=1, yoffset=1)
+(h, actual_max_time) = draw_slurm_chart(filtered_data, canvas, max_time=max_time, width=term_width - 2, xoffset=1, yoffset=1)
 draw_rectangle(canvas, height = h + 2)
 draw_text(canvas, "{}/{} jobs currently running".format(len(filtered_data), len(data)), yoffset=h + 2)
-max_time_text = "{:02}:{:02}:{:02}".format(int(max_time / 60 / 60), int(max_time / 60) % 60, int(max_time) % 60)
+max_time_text = "{:02}:{:02}:{:02}".format(int(actual_max_time / 60 / 60), int(actual_max_time / 60) % 60, int(actual_max_time) % 60)
 draw_text(canvas, max_time_text, yoffset=h + 2, xoffset=term_width-len(max_time_text))
 
 print_canvas(canvas)
