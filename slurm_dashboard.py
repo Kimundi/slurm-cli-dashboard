@@ -84,6 +84,14 @@ def draw_slurm_chart(data, canvas, xoffset=0, yoffset=0, width=None, height=None
     (cwidth, cheight) = get_size(canvas)
 
     d_width = (width or cwidth)*2
+
+    if max_time == None:
+        max_time = 0
+        for e in data:
+            t = e["TIME"]
+            r = parse_time_to_seconds(t)
+            max_time = max(max_time, r)
+
     time_scale = (1 / max_time) * d_width
 
     dpic = make_pic(d_width, len(data))
@@ -162,7 +170,7 @@ def parse_time_to_seconds(s):
 ################################################################################
 
 usage = argparse.ArgumentParser()
-usage.add_argument("--time-cutoff", default="2:00:00", help="time at which to cut off the graph")
+usage.add_argument("--time-cutoff", default="auto", help="time to which to scale the graph before a cutoff. 'auto' for automatic scaling")
 #usage.add_argument('squeueargs', nargs=argparse.REMAINDER, help="arguments to be passed to squeue")
 (args, extra_args) = usage.parse_known_args()
 
@@ -181,7 +189,10 @@ stdout = subprocess.run(["squeue", "--format", "%i;%u;%T;%M;%R"] + extra_args, s
 data = parse(stdout)
 
 min_time = parse_time_to_seconds("00:00")
-max_time = parse_time_to_seconds(args.time_cutoff)
+if args.time_cutoff == "auto":
+    max_time = None
+else:
+    max_time = parse_time_to_seconds(args.time_cutoff)
 
 filtered_data = []
 for e in data:
@@ -192,4 +203,7 @@ for e in data:
 h = draw_slurm_chart(filtered_data, canvas, width=term_width - 2, xoffset=1, yoffset=1)
 draw_rectangle(canvas, height = h + 2)
 draw_text(canvas, "{}/{} jobs currently running".format(len(filtered_data), len(data)), yoffset=h + 2)
+max_time_text = "{:02}:{:02}:{:02}".format(int(max_time / 60 / 60), int(max_time / 60) % 60, int(max_time) % 60)
+draw_text(canvas, max_time_text, yoffset=h + 2, xoffset=term_width-len(max_time_text))
+
 print_canvas(canvas)
