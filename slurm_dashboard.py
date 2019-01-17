@@ -85,6 +85,7 @@ def draw_slurm_chart(data, canvas, xoffset=0, yoffset=0, width=None, height=None
 
     d_width = (width or cwidth)*2
 
+    nonlocal max_time
     if max_time == None:
         max_time = 0
         for e in data:
