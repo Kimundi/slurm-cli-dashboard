@@ -26,7 +26,9 @@ def make_pic(width, height):
 
 def get_size(pic):
     height = len(pic)
-    width = len(pic[0])
+    width = 0
+    if height > 0:
+        width = len(pic[0])
     return (width, height)
 
 def div_round_up(v, x):
@@ -91,6 +93,9 @@ def draw_slurm_chart(data, canvas, xoffset=0, yoffset=0, width=None, height=None
             t = e["TIME"]
             r = parse_time_to_seconds(t)
             max_time = max(max_time, r)
+
+    if max_time == 0:
+        max_time = 1
 
     time_scale = (1 / max_time) * d_width
 
@@ -185,8 +190,13 @@ canvas = make_2d(term_width, term_height, " ")
 
 # print("Terminal dimensions: {} x {}".format(term_width, term_height))
 
-stdout = subprocess.run(["squeue", "--format", "%i;%u;%T;%M;%R"] + extra_args, stdout=subprocess.PIPE, encoding="utf-8").stdout
-data = parse(stdout)
+data = []
+
+try:
+    stdout = subprocess.run(["squeue", "--format", "%i;%u;%T;%M;%R"] + extra_args, stdout=subprocess.PIPE, encoding="utf-8").stdout
+    data = parse(stdout)
+except:
+    pass
 
 min_time = parse_time_to_seconds("00:00")
 if args.time_cutoff == "auto":
